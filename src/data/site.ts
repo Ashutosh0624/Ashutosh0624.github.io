@@ -3,7 +3,7 @@ export const person = {
   name: 'Ashutosh Kumar Tiwari',
   short: 'AKT',
   role: 'Engineer II, Connectivity & Embedded Systems',
-  employer: 'Safran Electronics & Defense',
+  employer: 'Safran Engineering Services',
   location: 'Bangalore, India',
   email: 'ashutoshktiwari91@gmail.com',
   github: 'https://github.com/Ashutosh0624',
@@ -11,7 +11,7 @@ export const person = {
   tagline:
     'Embedded & connectivity software for systems that fly — and research on making autonomous ones provably safe.',
   summary:
-    'Engineer II at Safran Electronics & Defense, working on satellite modem management for aircraft connectivity. Previously DO-178C DAL-A software for the Rolls-Royce Trent 900 FADEC and marine navigation HMIs at Raymarine. I build in C++ and Python, and my research applies formal verification (Z3/SMT) to AI agents in aerospace and maritime systems.',
+    'Engineer II at Safran Engineering Services, working on satellite modem management for aircraft connectivity. Previously DO-178C DAL-A software for the Rolls-Royce Trent 900 FADEC and marine navigation HMIs at Raymarine. I build in C++ and Python, and my research applies formal verification (Z3/SMT) to AI agents in aerospace and maritime systems.',
 };
 
 export const telemetry: [string, string][] = [
@@ -80,7 +80,7 @@ export const jobs = [
   {
     period: '',
     role: 'Engineer II, Connectivity & Embedded Systems',
-    org: 'Safran Electronics & Defense',
+    org: 'Safran Engineering Services',
     place: 'Bangalore, India',
     summary:
       'Satellite modem management for aircraft connectivity; BITE, service manager, connectivity LRU manager and HAL components.',
