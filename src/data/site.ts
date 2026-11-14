@@ -1,4 +1,4 @@
-// Ek jagah saari personal info — CV, homepage aur footer yahin se padhte hain.
+// Single source of personal info — the homepage, CV and footer all read from here.
 export const person = {
   name: 'Ashutosh Kumar Tiwari',
   short: 'AKT',
@@ -75,7 +75,7 @@ export const interests = [
   'AI security',
 ];
 
-// Dates: jab confirm ho, `period` add karo (e.g. '2023 — Present'); khaali ho toh UI mein nahi dikhega.
+// Dates: fill in period (e.g. 2023 — Present); an empty value is hidden in the UI.
 export const jobs = [
   {
     period: '',
