@@ -1,0 +1,73 @@
+---
+import Base from '../layouts/Base.astro';
+import { person, jobs, education, skills, papers } from '../data/site';
+---
+<Base title="CV" description={`CV of ${person.name} — ${person.role}`} active="cv">
+  <div class="wrap" style="padding-top:56px;padding-bottom:96px">
+    <header style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px;padding-bottom:32px;border-bottom:1px solid var(--line);margin-bottom:40px">
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <p class="eyebrow">Curriculum vitae</p>
+        <h1 style="margin:0;font-family:var(--display);font-size:clamp(34px,5vw,52px);line-height:1.05;letter-spacing:-.02em">{person.name}</h1>
+        <p style="margin:0;color:var(--text-2);font-size:18px">{person.role} · {person.employer}</p>
+        <p class="mono dim" style="margin:0;font-size:13px">{person.location} · <a href={`mailto:${person.email}`}>{person.email}</a> · <a href={person.github}>github.com/Ashutosh0624</a> · <a href={person.linkedin}>linkedin.com/in/ashutoshktiwari</a></p>
+      </div>
+      <button class="btn primary no-print" type="button" id="print-cv">Download PDF</button>
+    </header>
+
+    <div class="cv-grid">
+      <div class="cv-main">
+        <section class="cv-block">
+          <h2>Summary</h2>
+          <p style="margin:0;color:var(--text-2);font-size:16.5px">Embedded and connectivity software engineer with 5 years across aerospace and marine systems: satellite modem management for aircraft connectivity (Safran), DO-178C DAL-A engine control software for the Rolls-Royce Trent 900 FADEC (ALTEN), and Qt/QML navigation HMIs (Raymarine). Research focus on runtime formal verification (Z3/SMT) of learning-based agents in safety-critical systems.</p>
+        </section>
+
+        <section class="cv-block">
+          <h2>Experience</h2>
+          {jobs.map((j) => (
+            <div class="cv-job">
+              <h3>{j.role}</h3>
+              <p class="mono" style="margin:4px 0 0;font-size:13px;color:var(--accent)">{j.org}{j.place && ` · ${j.place}`}{j.period && ` · ${j.period}`}</p>
+              <ul>{j.points.map((p) => <li>{p}</li>)}</ul>
+            </div>
+          ))}
+        </section>
+
+        <section class="cv-block">
+          <h2>Research (in preparation)</h2>
+          {papers.map((r) => (
+            <div class="cv-job">
+              <h3 style="font-size:17px">{r.title}</h3>
+              <p class="dim" style="margin:4px 0 0;font-size:14px">{r.authors} · {r.venue} · {r.status.toLowerCase()}</p>
+            </div>
+          ))}
+        </section>
+      </div>
+
+      <aside class="cv-side">
+        <section class="cv-block">
+          <h2>Education</h2>
+          {education.map((e) => (
+            <div style="margin-bottom:16px">
+              <p style="margin:0;font-family:var(--display);font-size:18px;font-weight:600">{e.degree}</p>
+              {e.school && <p style="margin:0;color:var(--text-2)">{e.school}</p>}
+              <p class="mono dim" style="margin:0;font-size:13px">{e.detail}</p>
+            </div>
+          ))}
+        </section>
+        <section class="cv-block">
+          <h2>Skills</h2>
+          <dl class="skills">
+            {skills.map(([k, v]) => (<div><dt>{k}</dt><dd>{v}</dd></div>))}
+          </dl>
+        </section>
+        <section class="cv-block">
+          <h2>Open source</h2>
+          <p style="margin:0;color:var(--text-2)"><a href="https://github.com/Ashutosh0624/aeroforge">aeroforge</a> — DO-178C-style workflow CLI (Python, CMake, cppcheck)</p>
+        </section>
+      </aside>
+    </div>
+  </div>
+  <script>
+    document.getElementById('print-cv')?.addEventListener('click', () => window.print());
+  </script>
+</Base>

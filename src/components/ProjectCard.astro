@@ -1,0 +1,19 @@
+---
+import type { CollectionEntry } from 'astro:content';
+interface Props { project: CollectionEntry<'projects'> }
+const { project } = Astro.props;
+const d = project.data;
+const statusClass =
+  d.status === 'Released' ? 's-released' : d.status === 'Planned' || d.status === 'Design phase' ? 's-planned' : 's-active';
+---
+<article class="card" data-category={d.category}>
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+    <span class="label">{d.code}</span>
+    <span class={`status ${statusClass}`}>{d.status}</span>
+  </div>
+  <h3>{d.title}</h3>
+  <p class="text">{d.tagline}</p>
+  {d.meta && <p class="metric">{d.meta}</p>}
+  <div class="tags">{d.stack.map((t) => <span class="tag">{t}</span>)}</div>
+  <a class="more" href={`/projects/${project.id}/`}>Read case study →<span class="sr-only" style="position:absolute;left:-9999px"> about {d.title}</span></a>
+</article>

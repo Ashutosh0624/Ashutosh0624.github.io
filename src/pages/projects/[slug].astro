@@ -1,0 +1,39 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((p) => ({ params: { slug: p.id }, props: { project: p } }));
+}
+
+const { project } = Astro.props;
+const d = project.data;
+const { Content } = await render(project);
+const statusClass =
+  d.status === 'Released' ? 's-released' : d.status === 'Planned' || d.status === 'Design phase' ? 's-planned' : 's-active';
+---
+<Base title={d.title} description={d.tagline} active="projects">
+  <div class="wrap" style="padding-top:48px;padding-bottom:96px">
+    <a class="mono" href="/#projects" style="font-size:13px;display:inline-block;padding:12px 0">← All projects</a>
+    <header style="display:flex;flex-direction:column;gap:18px;margin:24px 0 8px;max-width:860px">
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+        <span class="label">{d.code}</span>
+        <span class={`status ${statusClass}`}>{d.status}</span>
+        {d.target && <span class="label">· {d.target}</span>}
+      </div>
+      <h1 style="margin:0;font-family:var(--display);font-size:clamp(36px,5vw,56px);line-height:1.08;letter-spacing:-.02em">{d.title}</h1>
+      <p style="margin:0;font-family:var(--display);font-size:clamp(18px,2vw,22px);color:var(--text-2);line-height:1.45">{d.tagline}</p>
+      <div class="tags">{d.stack.map((t) => <span class="tag">{t}</span>)}</div>
+      <div class="actions" style="margin-top:6px">
+        {d.repo
+          ? <a class="btn primary" href={d.repo}>View on GitHub →</a>
+          : <span class="pill">Repository going public soon</span>}
+      </div>
+      {d.meta && <p class="metric" style="margin:0;align-self:flex-start">{d.meta}</p>}
+    </header>
+    <article class="prose">
+      <Content />
+    </article>
+  </div>
+</Base>

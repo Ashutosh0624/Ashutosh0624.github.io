@@ -1,0 +1,57 @@
+---
+import '../styles/global.css';
+import { person } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  active?: 'home' | 'projects' | 'cv';
+}
+const { title, description = person.tagline, active = 'home' } = Astro.props;
+const fullTitle = title ? `${title} · ${person.name}` : `${person.name} — Embedded & Aerospace Software`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const home = active === 'home' ? '' : '/';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta name="theme-color" content="#0A0E13" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <header class="nav">
+      <nav class="wrap" aria-label="Main">
+        <a class="brand" href="/"><span class="dot" aria-hidden="true"></span>{person.short} // GROUND STATION</a>
+        <div class="nav-links">
+          <a href={`${home}#now`}>01 Now</a>
+          <a href={`${home}#projects`} aria-current={active === 'projects' ? 'page' : undefined}>02 Projects</a>
+          <a href={`${home}#research`}>03 Research</a>
+          <a href={`${home}#experience`}>04 Experience</a>
+          <a href="/cv/" aria-current={active === 'cv' ? 'page' : undefined}>CV</a>
+          <a class="btn primary" href={`${home}#contact`}>Contact</a>
+        </div>
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer>
+      <div class="wrap">
+        <span>© {new Date().getFullYear()} {person.name}</span>
+        <span>Built with Astro · Hosted on GitHub Pages · Last sync {new Date().toISOString().slice(0, 10)}</span>
+      </div>
+    </footer>
+  </body>
+</html>

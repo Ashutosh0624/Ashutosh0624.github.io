@@ -1,0 +1,141 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { person, telemetry, now, papers, interests, jobs } from '../data/site';
+
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const filters = [
+  ['all', 'All'],
+  ['systems', 'C++ / Systems'],
+  ['embedded', 'Embedded'],
+  ['ml-formal', 'ML + Formal'],
+];
+---
+<Base>
+  <div class="wrap">
+    <section class="hero" id="top">
+      <div class="hero-main">
+        <p class="eyebrow">&gt; Link established · {person.location} · UTC+05:30</p>
+        <h1>{person.name}</h1>
+        <p class="tagline">{person.tagline}</p>
+        <p class="lead">{person.summary}</p>
+        <div class="actions">
+          <a class="btn primary" href="#projects">View projects →</a>
+          <a class="btn" href="/cv/">Read CV</a>
+          <a class="btn" href="#research">Research</a>
+        </div>
+      </div>
+      <aside class="tlm" aria-label="Profile summary">
+        <div class="tlm-head"><span>TLM / PROFILE.SYS</span><span class="tlm-ok"><span class="dot" aria-hidden="true"></span>NOMINAL</span></div>
+        <dl>
+          {telemetry.map(([k, v]) => (<><dt>{k}</dt><dd>{v}</dd></>))}
+          <dt>LINKS</dt>
+          <dd><a href={person.github}>github</a> · <a href={person.linkedin}>linkedin</a></dd>
+        </dl>
+      </aside>
+    </section>
+  </div>
+
+  <section class="section" id="now">
+    <div class="wrap">
+      <div class="section-head"><div><p class="eyebrow">01 / Current work</p><h2 class="h2">What I'm working on now</h2></div></div>
+      <div class="grid">
+        {now.map((n) => (
+          <article class="card">
+            <p class="label">{n.label}</p>
+            <h3>{n.title}</h3>
+            <p class="text">{n.text}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt" id="projects">
+    <div class="wrap">
+      <div class="section-head">
+        <div><p class="eyebrow">02 / Projects</p><h2 class="h2">Selected engineering work</h2></div>
+        <div class="filters" role="group" aria-label="Filter projects">
+          {filters.map(([key, label], i) => (
+            <button type="button" data-filter={key} aria-pressed={i === 0 ? 'true' : 'false'}>{label}</button>
+          ))}
+        </div>
+      </div>
+      <div class="grid" id="project-grid" style="grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));">
+        {projects.map((p) => <ProjectCard project={p} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="research">
+    <div class="wrap research">
+      <div class="research-intro">
+        <p class="eyebrow">03 / Research</p>
+        <h2 class="h2" style="margin:0">Safe autonomy, verified at runtime</h2>
+        <p class="lead" style="margin:0">How do we let learning-based agents — LLMs, RL policies — act in safety-critical aerospace and maritime systems while keeping hard, checkable guarantees? I combine SMT solvers, physics-informed models and runtime assurance.</p>
+        <div class="tags" style="gap:8px">{interests.map((i) => <span class="pill">{i}</span>)}</div>
+      </div>
+      <ol class="papers">
+        {papers.map((r) => (
+          <li>
+            <p class="mono" style="font-size:12px"><span class="paper-status">{r.status}</span> <span class="dim">· {r.venue}</span></p>
+            <h3>{r.title}</h3>
+            <p style="color:var(--muted);font-size:15px">{r.blurb}</p>
+            <p class="dim" style="font-size:14px">{r.authors}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section alt" id="experience">
+    <div class="wrap">
+      <div class="section-head">
+        <div><p class="eyebrow">04 / Experience</p><h2 class="h2">Mission log</h2></div>
+        <a class="btn" href="/cv/">Full CV →</a>
+      </div>
+      <ol class="log">
+        {jobs.map((j) => (
+          <li class="card" style="flex-direction:row">
+            <div class="when">
+              {j.period && <span>{j.period}</span>}
+              <span class="dim">{j.org}</span>
+            </div>
+            <div class="what">
+              <h3>{j.role}</h3>
+              <p class="text">{j.summary}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" id="contact">
+    <div class="wrap contact">
+      <div style="flex: 999 1 520px; min-width: 0; display:flex; flex-direction:column; gap:14px">
+        <p class="eyebrow">05 / Uplink</p>
+        <h2 class="h2" style="margin:0;font-size:clamp(32px,4.4vw,44px)">Let's talk systems, safety or research.</h2>
+        <p class="lead" style="margin:0;max-width:620px">Open to conversations with aerospace engineering teams and research groups working on verified autonomy and satellite communications.</p>
+      </div>
+      <div class="contact-links">
+        <a href={`mailto:${person.email}`}><span>EMAIL</span><span>{person.email} →</span></a>
+        <a href={person.github}><span>GITHUB</span><span>Ashutosh0624 →</span></a>
+        <a href={person.linkedin}><span>LINKEDIN</span><span>ashutoshktiwari →</span></a>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+    const cards = document.querySelectorAll<HTMLElement>('#project-grid [data-category]');
+    buttons.forEach((btn) =>
+      btn.addEventListener('click', () => {
+        const f = btn.dataset.filter;
+        buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+        cards.forEach((c) => (c.hidden = f !== 'all' && c.dataset.category !== f));
+      }),
+    );
+  </script>
+</Base>
